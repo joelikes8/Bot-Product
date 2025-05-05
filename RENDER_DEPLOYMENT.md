@@ -25,10 +25,17 @@ This guide explains how to deploy your Discord bot on Render's hosting platform.
 
 Add the following environment variables in the Render dashboard:
 
-- `DISCORD_TOKEN`: Your Discord bot token
-- `APPLICATION_ID`: Your Discord application ID
-- `DATABASE_URL`: Your PostgreSQL database URL
-- `SESSION_SECRET`: A random string for Flask session security
+- `DISCORD_TOKEN`: Your Discord bot token (required)
+- `APPLICATION_ID`: Your Discord application ID (required)
+- `DATABASE_URL`: Your PostgreSQL database URL (required)
+- `SESSION_SECRET`: A random string for Flask session security (required)
+
+**Important Note:** 
+If you're encountering issues with the Discord bot not connecting, please check:
+- The `DISCORD_TOKEN` is valid and has not expired
+- The `APPLICATION_ID` matches your Discord application
+- The bot has been invited to your server with the correct permissions
+- Check the logs in the Render dashboard for specific error messages
 
 ### 3. Database Setup
 
