@@ -103,9 +103,22 @@ class Verification(commands.Cog):
                                 
                         # Try to update nickname if we have permission
                         try:
-                            await interaction.user.edit(nick=f"{roblox_display_name}")
+                            # Format nickname as "DisplayName (@username)"
+                            new_nickname = f"{roblox_display_name} (@{roblox_username})"
+                            # Make sure it fits within Discord's 32 character limit
+                            if len(new_nickname) > 32:
+                                # If too long, prioritize the display name and truncate username
+                                max_username_len = 32 - len(roblox_display_name) - 4  # 4 chars for " (@)"
+                                if max_username_len > 0:
+                                    new_nickname = f"{roblox_display_name} (@{roblox_username[:max_username_len]})"
+                                else:
+                                    # Last resort: just use display name truncated to 32 chars
+                                    new_nickname = roblox_display_name[:32]
+                            
+                            await interaction.user.edit(nick=new_nickname)
+                            logger.info(f"Updated nickname for {interaction.user.id} to {new_nickname}")
                         except discord.Forbidden:
-                            logger.warning(f"Could not update nickname for {interaction.user.id}")
+                            logger.warning(f"Could not update nickname for {interaction.user.id} - Missing permissions")
                 except Exception as e:
                     logger.error(f"Error giving verified role: {e}")
                 
@@ -248,9 +261,22 @@ class Verification(commands.Cog):
                 
                 # Try to update nickname if we have permission
                 try:
-                    await interaction.user.edit(nick=f"{roblox_display_name}")
+                    # Format nickname as "DisplayName (@username)"
+                    new_nickname = f"{roblox_display_name} (@{roblox_username})"
+                    # Make sure it fits within Discord's 32 character limit
+                    if len(new_nickname) > 32:
+                        # If too long, prioritize the display name and truncate username
+                        max_username_len = 32 - len(roblox_display_name) - 4  # 4 chars for " (@)"
+                        if max_username_len > 0:
+                            new_nickname = f"{roblox_display_name} (@{roblox_username[:max_username_len]})"
+                        else:
+                            # Last resort: just use display name truncated to 32 chars
+                            new_nickname = roblox_display_name[:32]
+                    
+                    await interaction.user.edit(nick=new_nickname)
+                    logger.info(f"Updated nickname for {interaction.user.id} to {new_nickname}")
                 except discord.Forbidden:
-                    logger.warning(f"Could not update nickname for {interaction.user.id}")
+                    logger.warning(f"Could not update nickname for {interaction.user.id} - Missing permissions")
                 
                 success_embed = create_embed(
                     title="Update Successful",
