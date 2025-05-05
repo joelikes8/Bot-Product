@@ -87,6 +87,15 @@ async def on_app_command_error(interaction: discord.Interaction, error: app_comm
             ephemeral=True
         )
 
+# Start the bot - this will be called when this module is imported from main.py
+token = os.environ.get('DISCORD_TOKEN')
+if token is None:
+    raise ValueError("DISCORD_TOKEN environment variable is not set or is empty")
+else:
+    logger.info(f"Starting Discord bot with token: {token[:5]}...{token[-5:] if len(token) > 10 else ''}")
+    bot.run(token)
+
+# This code will only run when bot.py is executed directly, not when imported
 if __name__ == "__main__":
-    # Run the bot with the token from environment variables
-    bot.run(os.getenv('DISCORD_TOKEN'))
+    # Already running from the code above
+    pass
