@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: roblox-discord-bot
+    env: python
+    buildCommand: pip install -r render-requirements.txt
+    startCommand: python main.py
+    plan: free
+    description: A Discord bot for Roblox community management with verification, tickets, and moderation
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.2
+      - key: PORT
+        value: 5000
+      # You'll need to add the following secrets in the Render dashboard:
+      # - DISCORD_TOKEN
+      # - APPLICATION_ID 
+      # - DATABASE_URL
