@@ -123,17 +123,32 @@ def run_flask():
 def run_bot():
     """Import and run the Discord bot"""
     try:
-        # Mark the bot as running
-        import bot
+        # Check for required environment variables
+        token = os.environ.get("DISCORD_TOKEN")
+        app_id = os.environ.get("APPLICATION_ID")
+        
+        if not token:
+            raise ValueError("DISCORD_TOKEN environment variable is not set")
+        if not app_id:
+            raise ValueError("APPLICATION_ID environment variable is not set")
+            
+        # Log the start attempt
+        logger.info(f"Starting Discord bot with APPLICATION_ID: {app_id[:4]}...{app_id[-4:] if len(app_id) > 8 else ''}")
+        
+        # Mark the bot as running - this will be set before importing bot
+        # because bot.py will start running the bot automatically when imported
         bot_status["running"] = True
-        logger.info("Discord bot started successfully")
-        # The bot will run from the imported file
+        
+        # When we import bot.py, it will automatically run the bot
+        # The bot is controlled by the bot.py file itself
+        import bot
     except Exception as e:
         error_msg = f"Failed to start Discord bot: {e}"
         logger.error(error_msg)
         bot_status["running"] = False
         bot_status["error"] = error_msg
-        sys.exit(1)
+        # Continue running the web server even if the bot fails
+        # This way we can see the error in the web interface
 
 if __name__ == '__main__':
     # Start the Flask app in a separate thread
